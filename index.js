@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const app = express();
 const cors = require("cors");
 const dbConnection = require("./config/dbConnection");
+const authRoute = require ("./routes/authRoute")
 
 // ===================
 
@@ -13,6 +14,8 @@ dbConnection()
 // ===============================
 
 app.use(express.json());
+
+app.use("/api/v1/auth", authRoute)
 
 app.get("/",(req,res)=>{
    res.send("Hello Browser")
