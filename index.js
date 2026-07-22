@@ -7,7 +7,7 @@ const cors = require("cors");
 const dbConnection = require("./config/dbConnection");
 const authRoute = require("./routes/authRoute");
 const { swaggerUi, specs } = require("./config/swagger");
-const { rateLimit, MINUTE } = require("express-rate-limit");
+const { generalLimiter } = require("./utils/rateLimiter");
 
 // ===================
 
@@ -15,15 +15,7 @@ dbConnection();
 
 // rate-limit 
 
-const limiter = rateLimit({
-  windowMs: 15 * MINUTE, 
-  limit: 100, 
-  standardHeaders: "draft-8", 
-  legacyHeaders: false, 
-  ipv6Subnet: 56, 
-});
-
-app.use(limiter);
+app.use(generalLimiter);
 
 // rate-limit 
 
