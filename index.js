@@ -30,7 +30,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 app.use("/api/v1/auth", authRoute);
 
 app.get("/", (req, res) => {
-  res.send("Hello Browser");
+ return res.send("Hello Browser");
 });
 
 //for express routes =============================
