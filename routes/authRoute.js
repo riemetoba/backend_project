@@ -33,14 +33,15 @@ router.post("/sendotp", async (req, res) => {
   let existingUser = await User.findOne({ email: email });
 
   if (!existingUser) {
-    let user = new User({
+    let user = await new User({
       email: email,
       otp: otp,
     }).save();
   } else {
     await User.findOneAndUpdate({ email: email }, { otp: otp });
+  }
 
-    const info = await transporter.sendMail({
+  const info = await transporter.sendMail({
     from: '"xyz company" riemehasan06@gmail.com', // sender address
     to: email, // list of recipients
     subject: "Hello, do you need OTP?", // subject line
@@ -48,10 +49,21 @@ router.post("/sendotp", async (req, res) => {
   });
 
   console.log("Message sent: %s", info.messageId);
+
+  res.send("done");
+});
+
+router.post("/login/:email", async (req, res) => {
+  const { email } = req.body;
+  const { otp } = req.body;
+
+  let existingUser = await User.findOne({ email: email });
+
+  if (existingUser.otp == otp) {
+    res.send("login");
+  } else {
+    res.send("Invalid OTP");
   }
-
-  res.send("done")
-
 });
 
 module.exports = router;
