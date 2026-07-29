@@ -7,9 +7,10 @@ const userSchema = new Schema({
         required: true,
         unique: true
     },
-    userName: {
+    otp: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     }
 })
 
