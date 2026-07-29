@@ -11,6 +11,10 @@ const userSchema = new Schema({
         type: String,
         required: true,
         unique: true
+    },
+    isLogin: {
+        type: Boolean,
+        default: false
     }
 })
 

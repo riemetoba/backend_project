@@ -50,19 +50,29 @@ router.post("/sendotp", async (req, res) => {
 
   console.log("Message sent: %s", info.messageId);
 
-  res.send("done");
+  return res.send("done");
 });
 
 router.post("/login/:email", async (req, res) => {
-  const { email } = req.body;
-  const { otp } = req.body;
+  const { email, otp } = req.body;
 
   let existingUser = await User.findOne({ email: email });
 
+  console.log(existingUser.otp);
+
+  if (existingUser.isLogin) {
+    return res.status(400).send("Please logout first");
+  }
+
+  if (!existingUser.otp) {
+    return res.send("You're Fraud");
+  }
+
   if (existingUser.otp == otp) {
-    res.send("login");
+    await User.findOneAndUpdate({ email: email }, { otp: "", isLogin: true });
+    return res.send("Successfully login");
   } else {
-    res.send("Invalid OTP");
+    return res.send("Invalid OTP");
   }
 });
 
