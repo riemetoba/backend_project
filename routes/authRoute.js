@@ -50,13 +50,17 @@ router.post("/sendotp", async (req, res) => {
 
   console.log("Message sent: %s", info.messageId);
 
-  return res.send("done");
+  return res.status(200).send("done");
 });
 
 router.post("/login/:email", async (req, res) => {
   const { email, otp } = req.body;
 
   let existingUser = await User.findOne({ email: email });
+
+  if (!existingUser) {
+    return res.status(404).send("User not found");
+  }
 
   console.log(existingUser.otp);
 
@@ -65,14 +69,14 @@ router.post("/login/:email", async (req, res) => {
   }
 
   if (!existingUser.otp) {
-    return res.send("You're Fraud");
+    return res.status(403).send("You're Fraud");
   }
 
   if (existingUser.otp == otp) {
     await User.findOneAndUpdate({ email: email }, { otp: "", isLogin: true });
-    return res.send("Successfully login");
+    return res.status(200).send("Successfully login");
   } else {
-    return res.send("Invalid OTP");
+    return res.status(400).send("Invalid OTP");
   }
 });
 
