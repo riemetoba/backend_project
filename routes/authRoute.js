@@ -94,7 +94,7 @@ router.post("/logout", async(req, res)=>{
   }) 
  }
 
- let existingUser = await User.findOne({ emaill:email })
+ let existingUser = await User.findOne({ email:email })
 
  if (!existingUser) {
   res.status(400).send("User not found")
@@ -107,7 +107,7 @@ router.post("/logout", async(req, res)=>{
  await User.findOneAndUpdate({email: email}, {isLogin: false})
 
  return res.status(200).send("Successfully logged out")
- 
+
 })
 // logout 
 
