@@ -19,7 +19,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 // Nodemailer
-
+// OTP 
 router.post("/sendotp", async (req, res) => {
   const { email } = req.body;
 
@@ -52,7 +52,9 @@ router.post("/sendotp", async (req, res) => {
 
   return res.status(200).send("done");
 });
+// OTP 
 
+// login 
 router.post("/login/:email", async (req, res) => {
   const { email, otp } = req.body;
 
@@ -79,5 +81,35 @@ router.post("/login/:email", async (req, res) => {
     return res.status(400).send("Invalid OTP");
   }
 });
+// login 
+
+// logout 
+router.post("/logout", async(req, res)=>{
+ const {email} = req.body
+
+ if (!email) {
+  res.status(400).json({
+    success: false,
+    message: "Email is required"
+  }) 
+ }
+
+ let existingUser = await User.findOne({ emaill:email })
+
+ if (!existingUser) {
+  res.status(400).send("User not found")
+ }
+
+ if(!existingUser.isLogin){
+  res.status(400).send("You're not logged in")
+ }
+
+ await User.findOneAndUpdate({email: email}, {isLogin: false})
+
+ return res.status(200).send("Successfully logged out")
+ 
+})
+// logout 
+
 
 module.exports = router;
