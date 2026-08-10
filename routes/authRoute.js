@@ -119,7 +119,9 @@ router.get('/registration', async(req,res)=>{
     role: "student"
   }).save()
 
- 
+  res.send({
+    data: user
+  })
 })
 
 // ========= 
