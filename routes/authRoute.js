@@ -110,6 +110,17 @@ router.post("/logout", async(req, res)=>{
 
 })
 // logout 
+ 
+// ========= 
+router.get('/registration', async(req,res)=>{
+  let user = await new User({
+    userName: "Tasin",
+    email: "tasin@gmail.com",
+    role: "student"
+  }).save()
 
+ 
+})
 
+// ========= 
 module.exports = router;
