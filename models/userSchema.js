@@ -7,21 +7,21 @@ const userSchema = new Schema({
         required: true,
         unique: true
     },
-    otp: {
-        type: String,
-        required: true
-    },
-    isLogin: {
-        type: Boolean,
-        default: false
-    },
+    // otp: {
+    //     type: String,
+    //     required: true
+    // },
+    // isLogin: {
+    //     type: Boolean,
+    //     default: false
+    // },
     role:{
         type: String,
         enum: ["student","teacher","management"],
         default: "student"
     },
     permission:{
-        type: ["String"]
+        type: [String]
     }
 })
 
