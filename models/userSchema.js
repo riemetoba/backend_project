@@ -14,6 +14,14 @@ const userSchema = new Schema({
     isLogin: {
         type: Boolean,
         default: false
+    },
+    role:{
+        type: String,
+        enum: ["student","teacher","management"],
+        default: "student"
+    },
+    permission:{
+        type: ["String"]
     }
 })
 
