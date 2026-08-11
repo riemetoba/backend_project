@@ -3,6 +3,7 @@ const router = express.Router();
 const nodemailer = require("nodemailer");
 const otpGenerator = require("otp-generator");
 const User = require("../models/userSchema");
+const permission = require("../permission")
 
 // router.get('/registration', (req, res) => {
 //  return res.send('Birds home page');
@@ -123,6 +124,9 @@ router.get('/registration', async(req,res)=>{
     data: user
   })
 })
+
+
+
 
 // ========= 
 module.exports = router;
