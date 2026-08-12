@@ -113,11 +113,22 @@ router.post("/logout", async(req, res)=>{
 // logout 
  
 // ========= 
-router.get('/registration', async(req,res)=>{
+router.post('/registration', async(req,res)=>{
+const {email, userName, role} = req.body
+
+let rolePermission = []
+
+permission.map(item =>{
+  console.log(item);
+  
+})
+
+
+
   let user = await new User({
-    userName: "Tasin",
-    email: "tasin@gmail.com",
-    role: "student"
+    userName: userName,
+    email: email,
+    role: role
   }).save()
 
   res.send({

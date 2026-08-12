@@ -2,10 +2,9 @@ const mongoose = require ('mongoose')
 const {Schema} = mongoose
 
 const userSchema = new Schema({
-    email: {
+    email:{
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     // otp: {
     //     type: String,
