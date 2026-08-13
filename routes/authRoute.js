@@ -114,12 +114,15 @@ router.post("/logout", async(req, res)=>{
  
 // ========= 
 router.post('/registration', async(req,res)=>{
-const {email, userName, role} = req.body
+const {email, userName, role='student'} = req.body
 
-let rolePermission = []
+let rolePermission;
 
 permission.map(item =>{
-  console.log(item);
+  if (item.role == role) {
+    rolePermission = item.permission;
+  }
+  
   
 })
 
@@ -128,7 +131,8 @@ permission.map(item =>{
   let user = await new User({
     userName: userName,
     email: email,
-    role: role
+    role: role,
+    permission: rolePermission
   }).save()
 
   res.send({
