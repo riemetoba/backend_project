@@ -140,7 +140,10 @@ permission.map(item =>{
   })
 })
 
-
+router.post("/login", async(req, res)=>{
+  const {email} = req.body
+  let existingUser = await User.findOne({email:email})
+})
 
 
 // ========= 
