@@ -5,6 +5,7 @@ const otpGenerator = require("otp-generator");
 const User = require("../models/userSchema");
 const permission = require("../permission");
 var jwt = require("jsonwebtoken");
+const accessToken = require("../middleware/accessToken")
 
 // router.get('/registration', (req, res) => {
 //  return res.send('Birds home page');
@@ -158,21 +159,10 @@ router.post("/login", async (req, res) => {
     accessToken: token,
   });
 });
-function abc(req, res, next) {
-  let token = req.headers.authorization;
-  console.log(token.split(" ")[1]);
 
-  jwt.verify(token.split(" ")[1], process.env.JWT_SECRET_ACCESS, function(err, decoded) {
-  if(decoded.role == "student"){
-     res.send("permission denied")
-  }else{
-    next()
-  }
-});
-  
-}
 
- router.get("/privateData",abc, async(req, res)=>{
+
+ router.get("/privateData",accessToken, async(req, res)=>{
     res.send("private data")
   })
 //login
