@@ -3,8 +3,8 @@ const router = express.Router();
 const nodemailer = require("nodemailer");
 const otpGenerator = require("otp-generator");
 const User = require("../models/userSchema");
-const permission = require("../permission")
-var jwt = require('jsonwebtoken');
+const permission = require("../permission");
+var jwt = require("jsonwebtoken");
 
 // router.get('/registration', (req, res) => {
 //  return res.send('Birds home page');
@@ -21,7 +21,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 // Nodemailer
-// OTP 
+// OTP
 router.post("/sendotp", async (req, res) => {
   const { email } = req.body;
 
@@ -54,9 +54,9 @@ router.post("/sendotp", async (req, res) => {
 
   return res.status(200).send("done");
 });
-// OTP 
+// OTP
 
-// login 
+// login
 router.post("/login/:email", async (req, res) => {
   const { email, otp } = req.body;
 
@@ -83,80 +83,81 @@ router.post("/login/:email", async (req, res) => {
     return res.status(400).send("Invalid OTP");
   }
 });
-// login 
+// login
 
-// logout 
-router.post("/logout", async(req, res)=>{
- const {email} = req.body
+// logout
+router.post("/logout", async (req, res) => {
+  const { email } = req.body;
 
- if (!email) {
-  res.status(400).json({
-    success: false,
-    message: "Email is required"
-  }) 
- }
-
- let existingUser = await User.findOne({ email:email })
-
- if (!existingUser) {
-  res.status(400).send("User not found")
- }
-
- if(!existingUser.isLogin){
-  res.status(400).send("You're not logged in")
- }
-
- await User.findOneAndUpdate({email: email}, {isLogin: false})
-
- return res.status(200).send("Successfully logged out")
-
-})
-// logout 
- 
-// ========= 
-//registration
-router.post('/registration', async(req,res)=>{
-const {email, userName, role='student'} = req.body
-
-let rolePermission;
-
-permission.map(item =>{
-  if (item.role == role) {
-    rolePermission = item.permission;
+  if (!email) {
+    res.status(400).json({
+      success: false,
+      message: "Email is required",
+    });
   }
-  
-  
-})
 
+  let existingUser = await User.findOne({ email: email });
 
+  if (!existingUser) {
+    res.status(400).send("User not found");
+  }
+
+  if (!existingUser.isLogin) {
+    res.status(400).send("You're not logged in");
+  }
+
+  await User.findOneAndUpdate({ email: email }, { isLogin: false });
+
+  return res.status(200).send("Successfully logged out");
+});
+// logout
+
+// =========
+//registration
+router.post("/registration", async (req, res) => {
+  const { email, userName, role = "student" } = req.body;
+
+  let rolePermission;
+
+  permission.map((item) => {
+    if (item.role == role) {
+      rolePermission = item.permission;
+    }
+  });
 
   let user = await new User({
     userName: userName,
     email: email,
     role: role,
-    permission: rolePermission
-  }).save()
+    permission: rolePermission,
+  }).save();
 
-  res.send({
-    data: user
-  })
-})
+  res.json({
+    data: user,
+  });
+});
 //registration
 
 //login
-router.post("/login", async(req, res)=>{
-  const {email} = req.body
-  let existingUser = await User.findOne({email:email})
+router.post("/login", async (req, res) => {
+  const { email } = req.body;
+  let existingUser = await User.findOne({ email: email });
 
-  jwt.sign({
-  _id: existingUser._id,
-  email: existingUser.email,
-  role: existingUser.role,
-  permission: existingUser.permission
-}, process.env.JWT_SECRET_ACCESS, { expiresIn: '1h' });
-})
+  let token = jwt.sign(
+    {
+      _id: existingUser._id,
+      email: existingUser.email,
+      role: existingUser.role,
+      permission: existingUser.permission,
+    },
+    process.env.JWT_SECRET_ACCESS,
+    { expiresIn: "1h" },
+  );
+
+  res.json({
+    accessToken: token,
+  });
+});
 //login
-
-
 
 module.exports = router;
