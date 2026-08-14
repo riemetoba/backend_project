@@ -4,6 +4,7 @@ const nodemailer = require("nodemailer");
 const otpGenerator = require("otp-generator");
 const User = require("../models/userSchema");
 const permission = require("../permission")
+var jwt = require('jsonwebtoken');
 
 // router.get('/registration', (req, res) => {
 //  return res.send('Birds home page');
@@ -113,6 +114,7 @@ router.post("/logout", async(req, res)=>{
 // logout 
  
 // ========= 
+//registration
 router.post('/registration', async(req,res)=>{
 const {email, userName, role='student'} = req.body
 
@@ -139,12 +141,22 @@ permission.map(item =>{
     data: user
   })
 })
+//registration
 
+//login
 router.post("/login", async(req, res)=>{
   const {email} = req.body
   let existingUser = await User.findOne({email:email})
+
+  jwt.sign({
+  _id: existingUser._id,
+  email: existingUser.email,
+  role: existingUser.role,
+  permission: existingUser.permission
+}, process.env.JWT_SECRET_ACCESS, { expiresIn: '1h' });
 })
+//login
 
 
-// ========= 
+
 module.exports = router;
