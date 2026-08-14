@@ -158,6 +158,23 @@ router.post("/login", async (req, res) => {
     accessToken: token,
   });
 });
+function abc(req, res, next) {
+  let token = req.headers.authorization;
+  console.log(token.split(" ")[1]);
+
+  jwt.verify(token.split(" ")[1], process.env.JWT_SECRET_ACCESS, function(err, decoded) {
+  if(decoded.role == "student"){
+     res.send("permission denied")
+  }else{
+    next()
+  }
+});
+  
+}
+
+ router.get("/privateData",abc, async(req, res)=>{
+    res.send("private data")
+  })
 //login
 
 module.exports = router;
